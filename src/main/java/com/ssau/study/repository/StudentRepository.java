@@ -10,4 +10,10 @@ public interface StudentRepository {
     List<Student> findAll();
 
     List<Student> findAllByName(String name);
+
+    void update();
+
+    Student addStudent();
+
+    int deleteById(String id);
 }

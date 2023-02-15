@@ -30,4 +30,5 @@ public class StudentController {
     public List<Student> findAllByName(@PathVariable String name) {
         return studentRepository.findAllByName(name);
     }
+
 }
