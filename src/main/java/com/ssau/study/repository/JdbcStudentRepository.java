@@ -4,6 +4,7 @@ import com.ssau.study.entity.Student;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -41,19 +42,40 @@ public class JdbcStudentRepository implements StudentRepository {
     }
 
     @Override
-    public void update() {
+    public int update(Student student) {
+        MapSqlParameterSource ps = new MapSqlParameterSource();
+        ps.addValue("id", student.getId());
+        ps.addValue("name", student.getName());
+        ps.addValue("birthdate", student.getBirthdate());
+        ps.addValue("number", student.getNumber());
+
+        int result = namedParameterJdbcTemplate.update("update public.students " +
+                        "set name = :name, birthdate = :birthdate, number = :number " +
+                        "where id = :id ",
+                ps);
+        return result;
     }
 
     @Override
-    public int save(Student student) {
-        return jdbcTemplate.update(
-                "INSERT INTO public.students VALUES (?, ?, ?, ?)",
-                student.getId(), student.getName(), student.getBirthdate(), student.getNumber());
+    public Student save(Student student) {
+        MapSqlParameterSource ps = new MapSqlParameterSource();
+        ps.addValue("name", student.getName());
+        ps.addValue("birthdate", student.getBirthdate());
+        ps.addValue("number", student.getNumber());
+
+        int id = namedParameterJdbcTemplate.queryForObject(
+                "INSERT INTO public.students (name, birthdate, number) VALUES (:name, :birthdate, :number) RETURNING id",
+                ps, Integer.class
+        );
+        student.setId(id);
+        return student;
     }
 
 
     @Override
-    public int delete(String id) {
-        return jdbcTemplate.update("DELETE FROM public.students WHERE id =:id?", id);
+    public int delete(long id) {
+        return namedParameterJdbcTemplate.update(
+                "DELETE FROM public.students WHERE id=:id", Collections.singletonMap("id", id)
+        );
     }
 }

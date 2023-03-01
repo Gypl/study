@@ -11,9 +11,9 @@ public interface StudentRepository {
 
     List<Student> findAllByName(String name);
 
-    void update();
+    int update(Student student);
 
-    int save(Student student);
+    Student save(Student student);
 
-    int delete(String id);
+    int delete(long id);
 }

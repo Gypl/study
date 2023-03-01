@@ -3,10 +3,7 @@ package com.ssau.study.controller;
 import com.ssau.study.entity.Student;
 import com.ssau.study.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,5 +28,18 @@ public class StudentController {
         return studentRepository.findAllByName(name);
     }
 
-    public int save() {;}
+    @PostMapping("/create")
+    public Student saveStudent(@RequestBody Student student) {
+        return studentRepository.save(student);
+    }
+
+    @PutMapping("/update")
+    public int updateStudent(@RequestBody Student student) {
+        return studentRepository.update(student);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public int deleteStudent(@PathVariable(name = "id") Long id) {
+        return studentRepository.delete(id);
+    }
 }
