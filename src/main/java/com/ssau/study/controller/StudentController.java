@@ -31,4 +31,5 @@ public class StudentController {
         return studentRepository.findAllByName(name);
     }
 
+    public int save() {;}
 }

@@ -13,7 +13,7 @@ public interface StudentRepository {
 
     void update();
 
-    Student addStudent();
+    int save(Student student);
 
-    int deleteById(String id);
+    int delete(String id);
 }

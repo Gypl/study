@@ -45,17 +45,15 @@ public class JdbcStudentRepository implements StudentRepository {
     }
 
     @Override
-    public Student addStudent(Student student) {
-
+    public int save(Student student) {
         return jdbcTemplate.update(
-                "INSERT INTO public.students VALUES (?, ?, ?, ?)", id, "Bill", "Gates", "USA");
+                "INSERT INTO public.students VALUES (?, ?, ?, ?)",
+                student.getId(), student.getName(), student.getBirthdate(), student.getNumber());
     }
 
 
     @Override
-    public int deleteById(String id) {
-        Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("id", id);
-        return jdbcTemplate.update("DELETE FROM public.students WHERE id =:id?", paramMap);
+    public int delete(String id) {
+        return jdbcTemplate.update("DELETE FROM public.students WHERE id =:id?", id);
     }
 }
