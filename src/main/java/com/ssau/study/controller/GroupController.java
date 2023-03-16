@@ -9,22 +9,22 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v2")
+@RequestMapping("/api/groups")
 public class GroupController {
     @Autowired
     private GroupService groupService;
 
-    @GetMapping("/groups")
+    @GetMapping
     public List<GroupPojo> findAll() {
         return groupService.findAll(null);
     }
 
-    @GetMapping("/groups/{name}")
+    @GetMapping("/{name}")
     public List<GroupPojo> findAllByName(@PathVariable String name) {
         return groupService.findAll(name);
     }
 
-    @PostMapping("/groups/{groupId}/students")
+    @PostMapping("/{groupId}/students")
     public StudentPojo createStudent(@PathVariable long groupId, @RequestBody StudentPojo pojo) {
         return groupService.create(groupId, pojo);
     }

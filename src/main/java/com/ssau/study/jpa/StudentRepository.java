@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface StudentRepository extends
         JpaRepository<Student, Long> {
-    @Query(value = "select * from public.students where name ilike '%' || :name || '%'", nativeQuery = true)
-    List<Student> selectByName(String name);
+    List<Student> findAllByNameContainingIgnoreCase(String name);
+    List<Student> findAllByGroupId(long groupId);
 }

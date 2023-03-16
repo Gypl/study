@@ -28,4 +28,11 @@ public class GroupPojo {
 
         return pojo;
     }
+    public static Group toEntity(GroupPojo groupPojo){
+        Group group = new Group();
+        group.setId(groupPojo.getId());
+        group.setName(groupPojo.getName());
+        group.setStudents(new ArrayList<>());
+        return group;
+    }
 }

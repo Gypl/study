@@ -1,6 +1,6 @@
 package com.ssau.study.orm;
 
-import com.ssau.study.entity.Student;
+import com.ssau.study.orm.Student;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
