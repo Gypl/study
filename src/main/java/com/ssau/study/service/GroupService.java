@@ -60,7 +60,7 @@ public class GroupService {
         studentRepository.save(student);
         return GroupPojo.fromEntity(group);
     }
-    public GroupPojo add(GroupPojo groupPojo){
+    public GroupPojo create(GroupPojo groupPojo){
         Group group = GroupPojo.toEntity(groupPojo);
         return GroupPojo.fromEntity(groupRepository.save(group));
     }

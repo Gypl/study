@@ -6,6 +6,7 @@ import com.ssau.study.orm.Student;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -19,10 +20,11 @@ public class StudentService {
     public long count(){
         return studentRepository.count();
     }
+
+    @Transactional
     public List<StudentPojo> findAll(String name) {
         List<StudentPojo> result = new ArrayList<>();
-        for (Student student : name == null ? studentRepository.findAll()
-                : studentRepository.findAllByNameContainingIgnoreCase(name)) {
+        for(Student student: name == null? studentRepository.findAll() : studentRepository.findAllByNameContainingIgnoreCase(name)){
             result.add(StudentPojo.fromEntity(student));
         }
         return result;
@@ -31,10 +33,13 @@ public class StudentService {
         Student student = StudentPojo.toEntity(studentPojo);
         return StudentPojo.fromEntity(studentRepository.save(student));
     }
-    public StudentPojo update(StudentPojo studentPojo){
-        Student student = StudentPojo.toEntity(studentPojo);
+    public StudentPojo update(StudentPojo studentPojo, long id){
+        Student student = studentRepository.findById(id).orElseThrow(()
+                -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        student.setName(studentPojo.getName());
+        student.setBirthdate(studentPojo.getBirthdate());
+        student.setNumber(studentPojo.getNumber());
         return StudentPojo.fromEntity(studentRepository.save(student));
-
     }
     public StudentPojo findById(long id){
         return StudentPojo.fromEntity(studentRepository.findById(id).orElseThrow(()

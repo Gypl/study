@@ -3,16 +3,18 @@ package com.ssau.study.controller;
 import com.ssau.study.dto.GroupPojo;
 import com.ssau.study.dto.StudentPojo;
 import com.ssau.study.service.GroupService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/groups")
 public class GroupController {
-    @Autowired
-    private GroupService groupService;
+
+    private final GroupService groupService;
     @GetMapping("/count")
     public long count() {
         return groupService.count();
@@ -32,12 +34,12 @@ public class GroupController {
         return groupService.findById(id);
     }
 
-    @PostMapping("/add")
-    public GroupPojo add(@RequestBody GroupPojo groupPojo){
-        return groupService.add(groupPojo);
+    @PostMapping("/create")
+    public GroupPojo create(@RequestBody GroupPojo groupPojo){
+        return groupService.create(groupPojo);
     }
-    @DeleteMapping("/delete")
-    public void delete(@RequestBody long id){
+    @DeleteMapping("/delete/{id}")
+    public void delete(@PathVariable long id){
         groupService.delete(id);
     }
     @GetMapping("/{groupId}/students")
