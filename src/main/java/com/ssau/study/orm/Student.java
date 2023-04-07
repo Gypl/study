@@ -18,7 +18,7 @@ public class Student {
     @Temporal(value = TemporalType.DATE)
     private Date birthdate;
     private int number;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "group_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Group group;
 }
