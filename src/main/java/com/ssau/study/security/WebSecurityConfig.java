@@ -2,6 +2,7 @@ package com.ssau.study.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
@@ -14,45 +15,49 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-@EnableWebSecurity
-public class WebSecurityConfig {
+@EnableWebSecurity // (1)
+@EnableMethodSecurity(securedEnabled = true, prePostEnabled = true)
+public class WebSecurityConfig { // (1)
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws  Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception { // (2)
         http
                 .csrf().disable()
                 .authorizeHttpRequests((requests) -> requests
-                        .regexMatchers("/", "/home", "/login").permitAll()
-                        .regexMatchers("/api/admin/*").hasRole("ADMIN")
-                        .anyRequest().authenticated()
+                        .requestMatchers("/", "/login").permitAll()
+                        .requestMatchers("/api/**").hasAnyRole("ADMIN", "USER")
+                        .anyRequest().authenticated() // (5)
                 )
                 .formLogin((form) -> form
-                        .loginPage("/login.html")
-                        .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/index.html")
-                        .failureUrl("/login.html?error=true")
+                        .loginPage("/login.html") // (6)
+                        .loginProcessingUrl("/login") // (6)
+                        .defaultSuccessUrl("/index.html") // (6)
+                        .failureUrl("/f") // (6)
                         .permitAll()
                 )
-                .logout(LogoutConfigurer::permitAll);
-        return  http.build();
+                .httpBasic();
+
+        return http.build();
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder() { // (8)
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public UserDetailsService userDetailsService() {
+    public UserDetailsService userDetailsService() { // (9)
         UserDetails user =
                 User.withUsername("user")
-                        .password(passwordEncoder().encode("password"))
+                        .password(passwordEncoder().encode("user"))
                         .roles("USER")
                         .build();
+
         UserDetails admin =
                 User.withUsername("admin")
-                        .password(passwordEncoder().encode("password"))
+                        .password(passwordEncoder().encode("admin"))
                         .roles("ADMIN")
                         .build();
-        return  new InMemoryUserDetailsManager(user, admin);
+
+        return new InMemoryUserDetailsManager(user, admin);
     }
 }

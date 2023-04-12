@@ -5,6 +5,8 @@ import com.ssau.study.jpa.StudentRepository;
 import com.ssau.study.orm.Student;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -16,6 +18,7 @@ import java.util.List;
 @Service
 public class StudentService {
     private final StudentRepository studentRepository;
+
 
     public long count(){
         return studentRepository.count();
