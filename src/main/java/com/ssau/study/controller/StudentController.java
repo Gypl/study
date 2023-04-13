@@ -17,13 +17,13 @@ public class StudentController {
     private final StudentService studentService;
 
     @GetMapping("/count")
-    @Secured("ADMIN")
+    @Secured("ROLE_ADMIN")
     public long count() {
         return studentService.count();
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<StudentPojo> findAll() {
         return studentService.findAll(null);
     }
