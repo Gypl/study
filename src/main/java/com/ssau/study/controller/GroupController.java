@@ -7,8 +7,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.text.ParseException;
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/groups")
@@ -47,7 +49,7 @@ public class GroupController {
         return  groupService.findAllStudents(groupId);
     }
     @PostMapping("/{groupId}/students")
-    public StudentPojo createStudent(@PathVariable long groupId, @RequestBody StudentPojo pojo) {
+    public StudentPojo createStudent(@PathVariable long groupId, @RequestBody StudentPojo pojo) throws ParseException {
         return groupService.createStudent(groupId, pojo);
     }
     @PostMapping("/{groupId}/students/{studentId}/move")
