@@ -3,8 +3,6 @@ package com.ssau.study.controller;
 import com.ssau.study.dto.StudentPojo;
 import com.ssau.study.service.StudentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,13 +16,13 @@ public class StudentController {
     private final StudentService studentService;
 
     @GetMapping("/count")
-    @Secured("ROLE_USER")
+    //@Secured("ROLE_USER")
     public long count() {
         return studentService.count();
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<StudentPojo> findAll() {
         return studentService.findAll(null);
     }
