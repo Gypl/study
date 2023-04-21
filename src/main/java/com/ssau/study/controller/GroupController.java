@@ -52,6 +52,10 @@ public class GroupController {
     public StudentPojo createStudent(@PathVariable long groupId, @RequestBody StudentPojo pojo) throws ParseException {
         return groupService.createStudent(groupId, pojo);
     }
+    @PutMapping("/update/{id}")
+    public GroupPojo update(@RequestBody GroupPojo groupPojo, @PathVariable long id) {
+        return groupService.update(groupPojo);
+    }
     @PostMapping("/{groupId}/students/{studentId}/move")
     public GroupPojo moveStudent(@PathVariable long groupId, @PathVariable long studentId){
         return groupService.moveStudent(groupId,studentId);
