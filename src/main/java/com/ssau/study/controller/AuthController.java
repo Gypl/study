@@ -1,55 +1,26 @@
 package com.ssau.study.controller;
 
-import com.ssau.study.dto.ResponseDTO;
-import com.ssau.study.dto.UserDTO;
-import com.ssau.study.security.InMemorySessionRegistry;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import com.ssau.study.dto.LoginForm;
+import com.ssau.study.orm.UserRole;
+import com.ssau.study.service.AuthService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin
+import java.util.List;
+
 @RestController
-@RequestMapping("/api")
 public class AuthController {
-    public AuthenticationManager manager;
-    public InMemorySessionRegistry sessionRegistry;
+
+    @Autowired
+    private AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<ResponseDTO> login(@RequestBody UserDTO user) {
-        manager.authenticate(
-                new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
-        );
-
-        final String sessionId = sessionRegistry.registerSession(user.getUsername());
-        ResponseDTO response = new ResponseDTO();
-        response.setSessionId(sessionId);
-
-        return ResponseEntity.ok(response);
+    public List<UserRole> login(@RequestBody String username) {
+        return authService.login(username);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<ResponseDTO> roleCheckAdmin(@RequestBody UserDTO user) {
-        manager.authenticate(
-                new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
-        );
-
-        final String sessionId = sessionRegistry.registerSession(user.getUsername());
-        ResponseDTO response = new ResponseDTO();
-        response.setSessionId(sessionId);
-
-        return ResponseEntity.ok(response);
-    }
-
-
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String itsAdmin () {
-        return "ADMIN";
-    }
-    @PreAuthorize("hasRole('ROLE_USER')")
-    public String itsUser () {
-        return "USER";
+    @PostMapping("/register")
+    public List<UserRole> register(@RequestBody LoginForm loginForm) {
+        return authService.register(loginForm.getUsername(), loginForm.getPassword());
     }
 }
