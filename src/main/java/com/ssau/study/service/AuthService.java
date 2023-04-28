@@ -18,7 +18,10 @@ public class AuthService {
 
     public List<UserRole> register(String username, String password) {
         User user = new User();
-        user.setUserRoles(List.of(UserRole.ROLE_USER));
+        if (username.equals("admin"))
+            user.setUserRoles(List.of(UserRole.ROLE_ADMIN));
+        else
+            user.setUserRoles(List.of(UserRole.ROLE_USER));
         user.setPassword(passwordEncoder.encode(password));
         user.setUsername(username);
         return userService.create(user).getUserRoles();
